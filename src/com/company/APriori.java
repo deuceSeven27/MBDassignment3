@@ -1,13 +1,19 @@
 package com.company;
 
+import java.util.HashMap;
+
 /**
  * Created by Rajesh on 5/23/2017.
  * This class runs the APriori algorithm
  */
 public class APriori {
 
-    public APriori(){
+    HashMap<Integer, Integer> firstPassCounts;
+    int support;
 
+    public APriori(int support){
+        firstPassCounts = new HashMap<Integer, Integer>();
+        this.support = support;
     }
 
     /*In the first pass, we create two tables. The first table, if necessary, translates
@@ -17,6 +23,7 @@ public class APriori {
     As we read baskets, we look at each item in the basket and translate its
     name into an integer. Next, we use that integer to index into the array of
     counts, and we add 1 to the integer found there.*/
+    //essentially this just counts all the items. (our dataset is already numbers
     public void AP_firstPass(){
 
     }
