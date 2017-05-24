@@ -11,19 +11,21 @@ import java.util.HashMap;
  */
 public class APriori {
 
-    HashMap<Integer, Integer> firstPassCounts;
-    ArrayList<String> data;
+    ArrayList<Basket> data;
     int support;
 
     public APriori(String data, int support){
-        firstPassCounts = new HashMap<Integer, Integer>();
+
         this.support = support;
         this.data = readFile(data);
     }
 
     //controls the Apriori running
     public void runApriori(){
+
         int k = 1;
+
+        ArrayList<ItemSet> CX = new ArrayList<ItemSet>();
 
         while(k > 1 /* && Lx[last].size() > 0*/){
 
@@ -87,9 +89,9 @@ public class APriori {
     }
 
     //read the data into memory
-    public ArrayList<String> readFile(String data){
+    public ArrayList<Basket> readFile(String data){
 
-        ArrayList<String> basketData = new ArrayList<String>();
+        ArrayList<Basket> basketData = new ArrayList<Basket>();
 
         try{
 
@@ -97,7 +99,8 @@ public class APriori {
 
             String line;
             while((line = br.readLine()) != null){
-                basketData.add(line);
+                Basket b = new Basket(line);
+                basketData.add(b);
             }
 
         }catch(Exception e){
