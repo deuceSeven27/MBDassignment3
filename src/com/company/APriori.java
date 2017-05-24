@@ -1,5 +1,8 @@
 package com.company;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -9,11 +12,22 @@ import java.util.HashMap;
 public class APriori {
 
     HashMap<Integer, Integer> firstPassCounts;
+    ArrayList<String> data;
     int support;
 
-    public APriori(int support){
+    public APriori(String data, int support){
         firstPassCounts = new HashMap<Integer, Integer>();
         this.support = support;
+        this.data = readFile(data);
+    }
+
+    //controls the Apriori running
+    public void runApriori(){
+        int k = 1;
+
+        while(k > 1 /* && Lx[last].size() > 0*/){
+
+        }
     }
 
     /*In the first pass, we create two tables. The first table, if necessary, translates
@@ -25,7 +39,7 @@ public class APriori {
     counts, and we add 1 to the integer found there.*/
     //essentially this just counts all the items. (our dataset is already numbers
     public void AP_firstPass(){
-
+        //read each item, hash the item and increment count
     }
 
     /*
@@ -70,6 +84,26 @@ public class APriori {
     */
     public void AP_secondPass(){
 
+    }
+
+    //read the data into memory
+    public ArrayList<String> readFile(String data){
+
+        ArrayList<String> basketData = new ArrayList<String>();
+
+        try{
+
+            BufferedReader br = new BufferedReader( new FileReader(data) );
+
+            String line;
+            while((line = br.readLine()) != null){
+                basketData.add(line);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return basketData;
     }
 
 }
