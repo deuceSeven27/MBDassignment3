@@ -21,14 +21,23 @@ public class APriori {
     }
 
     //controls the Apriori running
-    public void runApriori(){
+    public void runApriori(int support){
 
         int k = 1;
 
-        ArrayList<ItemSet> CX = new ArrayList<ItemSet>();
+        ArrayList<ArrayList<ItemSet>> CX = new ArrayList<ArrayList<ItemSet>>();
+        ArrayList<ArrayList<ItemSet>> LX = new ArrayList<ArrayList<ItemSet>>();
 
-        while(k > 1 /* && Lx[last].size() > 0*/){
+        ArrayList<ItemSet> currentC = new ArrayList<ItemSet>();
+        ArrayList<ItemSet> currentL = new ArrayList<ItemSet>();
+        ArrayList<ItemSet> lastL = null;
 
+        while(k > 1 && LX.get(LX.size() - 1).size() > 0){
+
+            //create table of candidate itemsets -> arraylist of itemsets, size k
+            currentC = AP_firstPass(data, k, lastL);
+
+            currentL = AP_secondPass(currentC, support);
         }
     }
 
@@ -39,9 +48,12 @@ public class APriori {
     As we read baskets, we look at each item in the basket and translate its
     name into an integer. Next, we use that integer to index into the array of
     counts, and we add 1 to the integer found there.*/
-    //essentially this just counts all the items. (our dataset is already numbers
-    public void AP_firstPass(){
+    //essentially this just counts all size k combinations of possible items
+    public ArrayList<ItemSet> AP_firstPass(ArrayList<Basket> data, int k, ArrayList<ItemSet> lastL){
         //read each item, hash the item and increment count
+        /*1. For each basket, look in the frequent-items table to see which of its items are frequent.
+        2. In a double loop, generate all pairs of frequent items in that basket.
+        3. For each such pair, add one to its count in the data structure used to store counts.*/
     }
 
     /*
@@ -84,7 +96,7 @@ public class APriori {
     Finally, at the end of the second pass, examine the structure of counts to
     determine which pairs are frequent.
     */
-    public void AP_secondPass(){
+    public ArrayList<ItemSet> AP_secondPass(ArrayList<ItemSet> C, int s){
 
     }
 
