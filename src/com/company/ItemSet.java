@@ -11,6 +11,15 @@ import java.util.Collections;
 public class ItemSet {
 
     ArrayList<Integer> items;
+    int count = 0;
+
+    public int getCount(){
+        return count;
+    }
+
+    public void incrementCount(){
+        count++;
+    }
 
     //returns the name of the itemset,
     //used for hashing and counting

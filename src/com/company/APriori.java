@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Rajesh on 5/23/2017.
@@ -23,27 +24,46 @@ public class APriori {
     //controls the Apriori running
     public void runApriori(int support){
 
-        int k = 1;
+        int k = 2;
 
-        ArrayList<ArrayList<ItemSet>> CX = new ArrayList<ArrayList<ItemSet>>();
-        ArrayList<ArrayList<ItemSet>> LX = new ArrayList<ArrayList<ItemSet>>();
+        ArrayList<HashMap<String, ItemSet>> CX = new ArrayList<HashMap<String, ItemSet>>();
+        ArrayList<HashMap<String, ItemSet>> LX = new ArrayList<HashMap<String, ItemSet>>();
 
-        HashMap<String, ItemSet> currentC = new HashMap<String, ItemSet>();
-        HashMap<String, ItemSet> currentL = new HashMap<String, ItemSet>();
+        HashMap<String, ItemSet> currentC = firstCount(data);
+        HashMap<String, ItemSet> currentL = firstFilter(currentC, support);
         HashMap<String, ItemSet> lastL = null;
+
+        CX.add(currentL); // add in the first set of itemsets
 
         //create first table, c1 and l1
         currentC = firstCount(data);
 
         currentL = firstFilter(currentC, support);
 
-        while(k > 1 && LX.get(LX.size() - 1).size() > 0){
+
+
+        while(LX.get(LX.size() - 1).size() > 0){
 
             //create table of candidate itemsets -> arraylist of itemsets, size k
             currentC = AP_firstPass(data, k, lastL);
 
             currentL = AP_secondPass(currentC, support);
         }
+    }
+
+    public HashMap<String, ItemSet> firstFilter(HashMap<String, ItemSet> c1, int support){
+
+        HashMap<String, ItemSet> L1 = new HashMap<String, ItemSet>();
+
+        //filter out non freq items
+        for(Map.Entry<String, ItemSet> item : c1.entrySet()){
+            //add to new hashtable if count > support
+            if(item.getValue().getCount() > support){
+                L1.put(item.getKey(), item.getValue())
+            }
+        }
+
+        return L1;
     }
 
     public HashMap<String, ItemSet> firstCount(ArrayList<Basket> data){
