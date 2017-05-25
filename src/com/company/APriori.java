@@ -30,7 +30,7 @@ public class APriori {
 
         ArrayList<ItemSet> currentC = new ArrayList<ItemSet>();
         ArrayList<ItemSet> currentL = new ArrayList<ItemSet>();
-        ArrayList<ItemSet> lastL = null;
+        HashMap<String, ItemSet> lastL = null;
 
         while(k > 1 && LX.get(LX.size() - 1).size() > 0){
 
@@ -49,11 +49,23 @@ public class APriori {
     name into an integer. Next, we use that integer to index into the array of
     counts, and we add 1 to the integer found there.*/
     //essentially this just counts all size k combinations of possible items
-    public ArrayList<ItemSet> AP_firstPass(ArrayList<Basket> data, int k, ArrayList<ItemSet> lastL){
+    public ArrayList<ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, Integer> lastL){
         //read each item, hash the item and increment count
         /*1. For each basket, look in the frequent-items table to see which of its items are frequent.
         2. In a double loop, generate all pairs of frequent items in that basket.
         3. For each such pair, add one to its count in the data structure used to store counts.*/
+        HashMap<String, Integer> countHash = new HashMap<String, Integer>();
+        for(Basket b : data){
+            //create all combinations of frequent itemsets of size k using the previous L
+            ArrayList<ItemSet> basketCombinations = createCombinations(b, k, lastL);
+            //add the result to the hashmap to count
+        }
+    }
+
+    //takes a basket, a size of combinations and the last L,  and returns an array of
+    // combinations of frequent itemsets with the size provided
+    public ArrayList<ItemSet> createCombinations(Basket b, int size,  HashMap<String, Integer> lastL){
+
     }
 
     /*
@@ -100,7 +112,7 @@ public class APriori {
 
     }
 
-    //read the data into memory
+    //read the data into memory, creating basket objects to represent them
     public ArrayList<Basket> readFile(String data){
 
         ArrayList<Basket> basketData = new ArrayList<Basket>();
@@ -120,5 +132,7 @@ public class APriori {
         }
         return basketData;
     }
+
+
 
 }

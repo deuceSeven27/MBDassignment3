@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Rajesh on 5/24/2017.
@@ -16,6 +15,6 @@ public class Basket {
         for(String item : parts){
             container.add(Integer.valueOf(item));
         }
-        Collections.sort(container);
+
     }
 }
