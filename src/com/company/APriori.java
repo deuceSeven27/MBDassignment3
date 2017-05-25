@@ -28,9 +28,14 @@ public class APriori {
         ArrayList<ArrayList<ItemSet>> CX = new ArrayList<ArrayList<ItemSet>>();
         ArrayList<ArrayList<ItemSet>> LX = new ArrayList<ArrayList<ItemSet>>();
 
-        ArrayList<ItemSet> currentC = new ArrayList<ItemSet>();
-        ArrayList<ItemSet> currentL = new ArrayList<ItemSet>();
+        HashMap<String, ItemSet> currentC = new HashMap<String, ItemSet>();
+        HashMap<String, ItemSet> currentL = new HashMap<String, ItemSet>();
         HashMap<String, ItemSet> lastL = null;
+
+        //create first table, c1 and l1
+        currentC = firstCount(data);
+
+        currentL = firstFilter(currentC, support);
 
         while(k > 1 && LX.get(LX.size() - 1).size() > 0){
 
@@ -41,6 +46,18 @@ public class APriori {
         }
     }
 
+    public HashMap<String, ItemSet> firstCount(ArrayList<Basket> data){
+        HashMap<String, ItemSet> firstCount = new HashMap<String, ItemSet>();
+
+        for(Basket b : data){
+            for(Integer item : b.getBasket()){
+                ItemSet singleton = new ItemSet(item);
+                firstCount.put(singleton.getName(), singleton);
+            }
+        }
+        return firstCount;
+    }
+
     /*In the first pass, we create two tables. The first table, if necessary, translates
     item names into integers from 1 to n, as described in Section 6.2.2. The other
     table is an array of counts; the ith array element counts the occurrences of the
@@ -49,7 +66,7 @@ public class APriori {
     name into an integer. Next, we use that integer to index into the array of
     counts, and we add 1 to the integer found there.*/
     //essentially this just counts all size k combinations of possible items
-    public ArrayList<ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, Integer> lastL){
+    public ArrayList<ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, ItemSet> lastL){
         //read each item, hash the item and increment count
         /*1. For each basket, look in the frequent-items table to see which of its items are frequent.
         2. In a double loop, generate all pairs of frequent items in that basket.
@@ -57,15 +74,34 @@ public class APriori {
         HashMap<String, Integer> countHash = new HashMap<String, Integer>();
         for(Basket b : data){
             //create all combinations of frequent itemsets of size k using the previous L
-            ArrayList<ItemSet> basketCombinations = createCombinations(b, k, lastL);
+            ArrayList<ItemSet> basketFreqCombinations = createCombinations(b, k, lastL);
             //add the result to the hashmap to count
         }
     }
 
     //takes a basket, a size of combinations and the last L,  and returns an array of
     // combinations of frequent itemsets with the size provided
-    public ArrayList<ItemSet> createCombinations(Basket b, int size,  HashMap<String, Integer> lastL){
+    public ArrayList<ItemSet> createCombinations(Basket b, int size,  HashMap<String, ItemSet> lastL){
+        //trying for a double loop first...
+        // TODO: 5/25/2017 Fix this wrong doubleloop
+        //get all frequent items
+        ArrayList<ItemSet> allItemSetCombinations = generateCombinationsions(size);
+        ArrayList<ItemSet> freqItemHolder = filterFrequentItems(b, lastL);
 
+
+
+        //add to arrayList if this itemset is frequent
+        for (Integer i : b.getBasket()){
+            //create potential itemset of size - 1
+
+        }
+    }
+
+    public ArrayList<ItemSet> filterFrequentItems(Basket b, HashMap<String, ItemSet> hash){
+        ArrayList<Integer> freqItems = new ArrayList<Integer>();
+        for(Integer item : b.getBasket()){
+            if()
+        }
     }
 
     /*

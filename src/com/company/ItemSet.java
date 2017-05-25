@@ -23,12 +23,27 @@ public class ItemSet {
         return name;
     }
 
+    public ItemSet(){
+        items = new ArrayList<Integer>();
+    }
+
+    public void addItem(Integer i){
+        items.add(i);
+        Collections.sort(items);
+    }
+
+    public ItemSet(int itemsForSet){
+        items = new ArrayList<Integer>();
+        this.addItem(itemsForSet);
+    }
+
     public ItemSet(ArrayList<Integer> itemsForSet){
         items = new ArrayList<Integer>();
         for(Integer i : itemsForSet){
             items.add(i);
         }
         Collections.sort(items);
-
     }
+
+
 }
