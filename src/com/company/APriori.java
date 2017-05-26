@@ -14,11 +14,9 @@ import java.util.Map;
 public class APriori {
 
     ArrayList<Basket> data;
-    int support;
 
-    public APriori(String data, int support){
+    public APriori(String data){
 
-        this.support = support;
         this.data = readFile(data);
     }
 
@@ -40,17 +38,22 @@ public class APriori {
         currentC = firstCount(data);
         currentL = firstFilter(currentC, support);
 
+        for(Map.Entry<String, ItemSet> i : currentC.entrySet()){
+            System.out.println(i.getKey() + " " + i.getValue().getCount());
+        }
+
+
         LX.add(currentL); // add in the first set of itemsets
         lastL = LX.get(LX.size() - 1); //lastL is the last element is the array
 
 
 
-        while(true/*LX.get(LX.size() - 1).size() > 0*//*last L is not empty*/){
+        /*while(true*//*LX.get(LX.size() - 1).size() > 0*//**//*last L is not empty*//*){
 
             //create table of candidate itemsets -> arraylist of itemsets, size k
             //currentC = AP_firstPass(data, k, lastL);
             //currentL = AP_secondPass(currentC, support);
-        }
+        }*/
     }
 
     /*In the first pass, we create two tables. The first table, if necessary, translates
@@ -139,7 +142,13 @@ public class APriori {
         for(Basket b : data){
             for(Integer item : b.getBasket()){
                 ItemSet singleton = new ItemSet(item);
-                firstCount.put(singleton.getName(), singleton);
+                if(firstCount.containsKey(singleton.getName())){
+                    //increment counter for the itemset
+                    firstCount.get(singleton.getName()).incrementCount();
+                }else{
+                    //else add it to the hashmap
+                    firstCount.put(singleton.getName(), singleton);
+                }
             }
         }
         return firstCount;

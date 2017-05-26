@@ -11,7 +11,7 @@ import java.util.Collections;
 public class ItemSet {
 
     ArrayList<Integer> items;
-    int count = 0;
+    int count = 1;
 
     public int getCount(){
         return count;
