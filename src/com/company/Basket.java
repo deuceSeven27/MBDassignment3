@@ -9,8 +9,10 @@ import java.util.Arrays;
 public class Basket {
 
     ArrayList<Integer> container;
+    String rawData;
 
     public Basket(String line){
+        rawData = line;
         container = new ArrayList<Integer>();
         if(line.equals("")) return;
         String[] parts = line.split(" ");
@@ -19,6 +21,10 @@ public class Basket {
             container.add(Integer.valueOf(item));
         }
 
+    }
+
+    public String printRawInput(){
+        return rawData;
     }
 
     public int size(){

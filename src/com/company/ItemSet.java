@@ -21,6 +21,10 @@ public class ItemSet {
         count++;
     }
 
+    public ArrayList<Integer> getItemsArray(){
+        return items;
+    }
+
     //returns the name of the itemset,
     //used for hashing and counting
     //the name is a sorted, space separated string of items (numbers)

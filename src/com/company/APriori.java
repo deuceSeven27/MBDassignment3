@@ -42,12 +42,19 @@ public class APriori {
 
         //lastL = currentL; //lastL is the last element is the array
 
-        while(lastL.size() > 0){
+        System.out.println("entering while loop!");
+        while(/*lastL.size() > 0*/k < 3 ){
+
+            lastL = LX.get(LX.size() - 1); // lastL is the last set of freq items found
 
             //start first pass starting with the C2 and L2
-            currentC = AP_firstPass(data, k, currentL);
+            currentC = AP_firstPass(data, k, lastL);
 
+            for(Map.Entry<String, ItemSet> i : currentC.entrySet()){
+                System.out.println(i.getKey() + " " + i.getValue().getCount());
+            }
 
+            k++;
         }
 
     }
@@ -73,18 +80,29 @@ public class APriori {
         for(Basket b : data){
             //create possible combinations
             ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
-            //for each combination, if its in lastL, then it is frequent
+
             //so add it to some container
+            System.out.println("Processing " + b.printRawInput());
 
             for (ItemSet is : allCombinations){
+                //for each combination, if its in lastL, then it is frequent
                 if(lastL.containsKey(is.getName())){
                     freqItems.add(is);
                 }
             }
 
+            System.out.println("frequentItems contains: ");
+            for (ItemSet is : freqItems){
+                System.out.print(is.getName() + ": " + is.getCount() + ", ");
+            }
+            System.out.println();
+
+
+
             //Now freqItems contains all frequent item candidates
-            //so increment count in the countHash if already inside
-            //else add it to the countHash
+            //SO CREATE ALL COMBINATIONS OF THE FREQUENT ITEMS OF SIZE K, THEN
+            //INCREMENT COUNT / ADD TO THE COUNTHASH
+            ArrayList<ItemSet> freqItemCombinations =
             for(ItemSet item : freqItems){
                 if(countHash.containsKey(item.getName())){
                     countHash.get(item.getName()).incrementCount();
