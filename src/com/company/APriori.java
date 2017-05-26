@@ -38,7 +38,7 @@ public class APriori {
         currentC = firstCount(data);
         currentL = firstFilter(currentC, support);
 
-        for(Map.Entry<String, ItemSet> i : currentC.entrySet()){
+        for(Map.Entry<String, ItemSet> i : currentL.entrySet()){
             System.out.println(i.getKey() + " " + i.getValue().getCount());
         }
 
