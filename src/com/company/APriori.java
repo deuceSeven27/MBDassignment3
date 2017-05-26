@@ -2,6 +2,7 @@ package com.company;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,49 +34,23 @@ public class APriori {
         HashMap<String, ItemSet> currentL = firstFilter(currentC, support);
         HashMap<String, ItemSet> lastL = null;
 
-        CX.add(currentL); // add in the first set of itemsets
 
-        //create first table, c1 and l1
+
+        //create first table, c1 and L1
         currentC = firstCount(data);
-
         currentL = firstFilter(currentC, support);
 
+        LX.add(currentL); // add in the first set of itemsets
+        lastL = LX.get(LX.size() - 1); //lastL is the last element is the array
 
 
-        while(LX.get(LX.size() - 1).size() > 0){
+
+        while(true/*LX.get(LX.size() - 1).size() > 0*//*last L is not empty*/){
 
             //create table of candidate itemsets -> arraylist of itemsets, size k
-            currentC = AP_firstPass(data, k, lastL);
-
-            currentL = AP_secondPass(currentC, support);
+            //currentC = AP_firstPass(data, k, lastL);
+            //currentL = AP_secondPass(currentC, support);
         }
-    }
-
-    public HashMap<String, ItemSet> firstFilter(HashMap<String, ItemSet> c1, int support){
-
-        HashMap<String, ItemSet> L1 = new HashMap<String, ItemSet>();
-
-        //filter out non freq items
-        for(Map.Entry<String, ItemSet> item : c1.entrySet()){
-            //add to new hashtable if count > support
-            if(item.getValue().getCount() > support){
-                L1.put(item.getKey(), item.getValue())
-            }
-        }
-
-        return L1;
-    }
-
-    public HashMap<String, ItemSet> firstCount(ArrayList<Basket> data){
-        HashMap<String, ItemSet> firstCount = new HashMap<String, ItemSet>();
-
-        for(Basket b : data){
-            for(Integer item : b.getBasket()){
-                ItemSet singleton = new ItemSet(item);
-                firstCount.put(singleton.getName(), singleton);
-            }
-        }
-        return firstCount;
     }
 
     /*In the first pass, we create two tables. The first table, if necessary, translates
@@ -92,55 +67,16 @@ public class APriori {
         2. In a double loop, generate all pairs of frequent items in that basket.
         3. For each such pair, add one to its count in the data structure used to store counts.*/
         HashMap<String, Integer> countHash = new HashMap<String, Integer>();
+
+        //first get all frequent items by checking lastL
+        ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
         for(Basket b : data){
-            //create all combinations of frequent itemsets of size k using the previous L
-            ArrayList<ItemSet> basketFreqCombinations = createCombinations(b, k, lastL);
-            //add the result to the hashmap to count
+            //create possible combinations
+            //ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
         }
+        return new ArrayList<ItemSet>();
     }
 
-    //takes a basket, a size of combinations and the last L,  and returns an array of
-    // combinations of frequent itemsets with the size provided
-    public ArrayList<ItemSet> createCombinations(Basket b, int size,  HashMap<String, ItemSet> lastL){
-        //trying for a double loop first...
-        // TODO: 5/25/2017 Fix this wrong doubleloop
-        //get all frequent items
-        ArrayList<ItemSet> allItemSetCombinations = generateCombinationsions(size);
-        ArrayList<ItemSet> freqItemHolder = filterFrequentItems(b, lastL);
-
-
-
-        //add to arrayList if this itemset is frequent
-        for (Integer i : b.getBasket()){
-            //create potential itemset of size - 1
-
-        }
-    }
-
-    public ArrayList<ItemSet> filterFrequentItems(Basket b, HashMap<String, ItemSet> hash){
-        ArrayList<Integer> freqItems = new ArrayList<Integer>();
-        for(Integer item : b.getBasket()){
-            if()
-        }
-    }
-
-    /*
-    * After the first pass, we examine the counts of the items to determine which of
-    them are frequent as singletons. It might appear surprising that many singletons
-    are not frequent. But remember that we set the threshold s sufficiently high
-    that we do not get too many frequent sets; a typical s would be 1% of the
-    baskets. If we think about our own visits to a supermarket, we surely buy
-    certain things more than 1% of the time: perhaps milk, bread, Coke or Pepsi,
-    and so on. We can even believe that 1% of the customers buy diapers, even
-    though we may not do so. However, many of the items on the shelves are surely
-    not bought by 1% of the customers: Creamy Caesar Salad Dressing for example.
-    For the second pass of A-Priori, we create a new numbering from 1 to m for
-    just the frequent items. This table is an array indexed 1 to n, and the entry
-    for i is either 0, if item i is not frequent, or a unique integer in the range 1 to
-    m if item i is frequent. We shall refer to this table as the frequent-items table.*/
-    public void AP_betweenPass(){
-
-    }
     /*
     * During the second pass, we count all the pairs that consist of two frequent
     items. Recall from Section 6.2.3 that a pair cannot be frequent unless both its
@@ -164,9 +100,86 @@ public class APriori {
     Finally, at the end of the second pass, examine the structure of counts to
     determine which pairs are frequent.
     */
-    public ArrayList<ItemSet> AP_secondPass(ArrayList<ItemSet> C, int s){
+    public ArrayList<ItemSet> AP_secondPass(HashMap<String, ItemSet> C, int s){
+        return new ArrayList<ItemSet>();
+    }
+
+    public HashMap<String, ItemSet> firstFilter(HashMap<String, ItemSet> c1, int support){
+
+        HashMap<String, ItemSet> L1 = new HashMap<String, ItemSet>();
+
+        //filter out non freq items by hasing to another table
+        for(Map.Entry<String, ItemSet> item : c1.entrySet()){
+            //add to new hashtable if count > support
+            if(item.getValue().getCount() > support){
+                L1.put(item.getKey(), item.getValue());
+            }
+        }
+
+        return L1;
+    }
+
+    public HashMap<String, ItemSet> firstCount(ArrayList<Basket> data){
+
+        HashMap<String, ItemSet> firstCount = new HashMap<String, ItemSet>();
+
+        for(Basket b : data){
+            for(Integer item : b.getBasket()){
+                ItemSet singleton = new ItemSet(item);
+                firstCount.put(singleton.getName(), singleton);
+            }
+        }
+        return firstCount;
+    }
+
+
+
+    //takes a basket, a size of combinations and the last L,  and returns an array of
+    // combinations of frequent itemsets with the size provided
+    public ArrayList<ItemSet> createCombinations(Basket b, int size,  HashMap<String, ItemSet> lastL){
+        //trying for a double loop first...
+        // TODO: 5/25/2017 Fix this wrong doubleloop
+        //get all frequent items
+        //ArrayList<ItemSet> allItemSetCombinations = generateCombinationsions(size);
+        ArrayList<ItemSet> freqItemHolder = filterFrequentItems(b, lastL);
+
+
+
+        //add to arrayList if this itemset is frequent
+        for (Integer i : b.getBasket()){
+            //create potential itemset of size - 1
+
+        }
+
+        return new ArrayList<ItemSet>();
+    }
+
+    public ArrayList<ItemSet> filterFrequentItems(Basket b, HashMap<String, ItemSet> hash){
+        ArrayList<Integer> freqItems = new ArrayList<Integer>();
+        for(Integer item : b.getBasket()){
+
+        }
+        return new ArrayList<ItemSet>();
+    }
+
+    /*
+    * After the first pass, we examine the counts of the items to determine which of
+    them are frequent as singletons. It might appear surprising that many singletons
+    are not frequent. But remember that we set the threshold s sufficiently high
+    that we do not get too many frequent sets; a typical s would be 1% of the
+    baskets. If we think about our own visits to a supermarket, we surely buy
+    certain things more than 1% of the time: perhaps milk, bread, Coke or Pepsi,
+    and so on. We can even believe that 1% of the customers buy diapers, even
+    though we may not do so. However, many of the items on the shelves are surely
+    not bought by 1% of the customers: Creamy Caesar Salad Dressing for example.
+    For the second pass of A-Priori, we create a new numbering from 1 to m for
+    just the frequent items. This table is an array indexed 1 to n, and the entry
+    for i is either 0, if item i is not frequent, or a unique integer in the range 1 to
+    m if item i is frequent. We shall refer to this table as the frequent-items table.*/
+    public void AP_betweenPass(){
 
     }
+
 
     //read the data into memory, creating basket objects to represent them
     public ArrayList<Basket> readFile(String data){
