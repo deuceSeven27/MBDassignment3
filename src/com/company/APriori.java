@@ -2,7 +2,6 @@ package com.company;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,32 +27,29 @@ public class APriori {
         ArrayList<HashMap<String, ItemSet>> CX = new ArrayList<HashMap<String, ItemSet>>();
         ArrayList<HashMap<String, ItemSet>> LX = new ArrayList<HashMap<String, ItemSet>>();
 
+        //create first table, c1 and L1
         HashMap<String, ItemSet> currentC = firstCount(data);
         HashMap<String, ItemSet> currentL = firstFilter(currentC, support);
-        HashMap<String, ItemSet> lastL = null;
 
+        LX.add(currentL); // add in the first set of itemsets
 
+        HashMap<String, ItemSet> lastL = LX.get(LX.size() - 1);
 
-        //create first table, c1 and L1
-        currentC = firstCount(data);
-        currentL = firstFilter(currentC, support);
 
         for(Map.Entry<String, ItemSet> i : currentL.entrySet()){
             System.out.println(i.getKey() + " " + i.getValue().getCount());
         }
 
+        //lastL = currentL; //lastL is the last element is the array
 
-        LX.add(currentL); // add in the first set of itemsets
-        lastL = LX.get(LX.size() - 1); //lastL is the last element is the array
+        while(lastL.size() > 0){
+
+            //start first pass starting with the C2 and L2
+            currentC = AP_firstPass(data, k, currentL);
 
 
+        }
 
-        /*while(true*//*LX.get(LX.size() - 1).size() > 0*//**//*last L is not empty*//*){
-
-            //create table of candidate itemsets -> arraylist of itemsets, size k
-            //currentC = AP_firstPass(data, k, lastL);
-            //currentL = AP_secondPass(currentC, support);
-        }*/
     }
 
     /*In the first pass, we create two tables. The first table, if necessary, translates
@@ -64,12 +60,12 @@ public class APriori {
     name into an integer. Next, we use that integer to index into the array of
     counts, and we add 1 to the integer found there.*/
     //essentially this just counts all size k combinations of possible items
-    public ArrayList<ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, ItemSet> lastL){
+    public HashMap<String, ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, ItemSet> lastL){
         //read each item, hash the item and increment count
         /*1. For each basket, look in the frequent-items table to see which of its items are frequent.
         2. In a double loop, generate all pairs of frequent items in that basket.
         3. For each such pair, add one to its count in the data structure used to store counts.*/
-        HashMap<String, Integer> countHash = new HashMap<String, Integer>();
+        HashMap<String, ItemSet> countHash = new HashMap<String, ItemSet>();
 
         //first get all frequent items by checking lastL
         ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
@@ -87,10 +83,18 @@ public class APriori {
             }
 
             //Now freqItems contains all frequent item candidates
-
+            //so increment count in the countHash if already inside
+            //else add it to the countHash
+            for(ItemSet item : freqItems){
+                if(countHash.containsKey(item.getName())){
+                    countHash.get(item.getName()).incrementCount();
+                }else{
+                    countHash.put(item.getName(), item);
+                }
+            }
 
         }
-        return freqItems;
+        return countHash;
     }
 
     /*
