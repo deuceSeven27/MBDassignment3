@@ -12,7 +12,9 @@ public class Basket {
 
     public Basket(String line){
         container = new ArrayList<Integer>();
+        if(line.equals("")) return;
         String[] parts = line.split(" ");
+
         for(String item : parts){
             container.add(Integer.valueOf(item));
         }
@@ -48,8 +50,11 @@ public class Basket {
 
             results.add(new ItemSet(new ArrayList<>(Arrays.asList(temp))));
             return;
+
         }else{
+
             for(int i = start; i <= end; i++){
+
                 temp[tempIndex] = container.get(i);
 
                 genComRecursion(i + 1, end, temp, size, tempIndex + 1, results);

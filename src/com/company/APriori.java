@@ -70,11 +70,24 @@ public class APriori {
 
         //first get all frequent items by checking lastL
         ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
+
         for(Basket b : data){
             //create possible combinations
-            //ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
+            ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
+            //for each combination, if its in lastL, then it is frequent
+            //so add it to some container
+
+            for (ItemSet is : allCombinations){
+                if(lastL.containsKey(is.getName())){
+                    freqItems.add(is);
+                }
+            }
+
+            //Now freqItems contains all frequent item candidates
+
+
         }
-        return new ArrayList<ItemSet>();
+        return freqItems;
     }
 
     /*
@@ -148,6 +161,7 @@ public class APriori {
         //add to arrayList if this itemset is frequent
         for (Integer i : b.getBasket()){
             //create potential itemset of size - 1
+
 
         }
 

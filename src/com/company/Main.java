@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
 
-        Basket b = new Basket("1 2 3 4 5");
-        ArrayList<ItemSet> res =  b.generateCombinations(3);
+        Basket b = new Basket("3 2 1");
+        ArrayList<ItemSet> res =  b.generateCombinations(2);
 
         for(ItemSet i : res){
             System.out.println(i.getName());
