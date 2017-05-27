@@ -46,6 +46,8 @@ public class APriori {
         System.out.println("entering while loop!");
         while(/*lastL.size() > 0*/k < 4 ){
 
+            System.out.println("Counting for " + k);
+
             lastL = LX.get(LX.size() - 1); // lastL is the last set of freq items found
 
             //start first pass starting with the C2 and L2
@@ -53,11 +55,17 @@ public class APriori {
 
 
 
+            System.out.println("currentC is:");
             for(Map.Entry<String, ItemSet> i : currentC.entrySet()){
                 System.out.println(i.getKey() + " " + i.getValue().getCount());
             }
 
             currentL = AP_secondPass(currentC, support);
+
+            System.out.println("currentL is:");
+            for(Map.Entry<String, ItemSet> i : currentL.entrySet()){
+                System.out.println(i.getKey() + " " + i.getValue().getCount());
+            }
 
 
             LX.add(currentL);
