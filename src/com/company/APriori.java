@@ -20,6 +20,10 @@ public class APriori {
         this.data = readFile(data);
     }
 
+    public APriori(ArrayList<Basket> basketArray){
+        this.data = basketArray;
+    }
+
     //controls the Apriori running
     public ArrayList<HashMap<String, ItemSet>> runApriori(int support){
 
