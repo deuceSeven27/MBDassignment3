@@ -78,10 +78,19 @@ public class APriori {
         ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
 
         for(Basket b : data){
-            //create possible combinations
-            ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
 
-            //so add it to some container
+            //create all combinations of size k from the basket
+            ArrayList<ItemSet> allCombinations = b.generateCombinations(k);
+            //for each combinations created, if this combination's parts are in Lk-1
+            for (ItemSet is : allCombinations){
+                //if(lastL.containsKey())
+            }
+            //then add to the freq items array, as this itemSet is frequent
+
+            ////////////////////////////////////////////////////////
+            //create possible combinations of k - 1
+            /*ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
+
             System.out.println("Processing " + b.printRawInput());
 
             for (ItemSet is : allCombinations){
@@ -95,9 +104,8 @@ public class APriori {
             for (ItemSet is : freqItems){
                 System.out.print(is.getName() + ": " + is.getCount() + ", ");
             }
+
             System.out.println();
-
-
 
             //Now freqItems contains all frequent item candidates
             //SO CREATE ALL COMBINATIONS OF THE FREQUENT ITEMS OF SIZE K, THEN
@@ -109,7 +117,7 @@ public class APriori {
                 }else{
                     countHash.put(item.getName(), item);
                 }
-            }
+            }*/
 
         }
         return countHash;
