@@ -21,7 +21,7 @@ public class APriori {
     }
 
     //controls the Apriori running
-    public void runApriori(int support){
+    public ArrayList<HashMap<String, ItemSet>> runApriori(int support){
 
         int k = 2;
 
@@ -44,7 +44,7 @@ public class APriori {
         //lastL = currentL; //lastL is the last element is the array
 
         System.out.println("entering while loop!");
-        while(/*lastL.size() > 0*/k < 3 ){
+        while(/*lastL.size() > 0*/k < 4 ){
 
             lastL = LX.get(LX.size() - 1); // lastL is the last set of freq items found
 
@@ -57,8 +57,17 @@ public class APriori {
                 System.out.println(i.getKey() + " " + i.getValue().getCount());
             }
 
+            currentL = AP_secondPass(currentC, support);
+
+
+            LX.add(currentL);
+
             k++;
         }
+
+        System.out.println("size is " + LX.size());
+
+        return LX;
 
     }
 
@@ -77,8 +86,7 @@ public class APriori {
         3. For each such pair, add one to its count in the data structure used to store counts.*/
         HashMap<String, ItemSet> countHash = new HashMap<String, ItemSet>();
 
-        //first get all frequent items by checking lastL
-        ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
+
 
         /*
         * for each basket, generate all combinations size k of items.
@@ -88,6 +96,9 @@ public class APriori {
         * */
 
         for(Basket b : data){
+
+            //first get all frequent items by checking lastL
+            ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
 
             //create all combinations of size k from the basket
             ArrayList<ItemSet> allCombinationsK = b.generateCombinations(k);
@@ -106,11 +117,17 @@ public class APriori {
                 freqItems.add(isK);
             }
 
+            //now freq items contains all itemsets of size k that are frequent, so count them
+            for (ItemSet is : freqItems){
+                if(countHash.containsKey(is.getName())){
+                    countHash.get(is.getName()).incrementCount();
+                }else{
+                    countHash.put(is.getName(), is);
+                }
+            }
+
         }
-        //now freq items contains all itemsets of size k that are frequent, so count them
-        for (ItemSet is : freqItems){
-            countHash.put(is.getName(), is);
-        }
+
         return countHash;
     }
 
