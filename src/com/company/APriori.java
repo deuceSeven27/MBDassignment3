@@ -208,52 +208,12 @@ public class APriori {
     }
 
 
-
-    //takes a basket, a size of combinations and the last L,  and returns an array of
-    // combinations of frequent itemsets with the size provided
-    public ArrayList<ItemSet> createCombinations(Basket b, int size,  HashMap<String, ItemSet> lastL){
-        //trying for a double loop first...
-        // TODO: 5/25/2017 Fix this wrong doubleloop
-        //get all frequent items
-        //ArrayList<ItemSet> allItemSetCombinations = generateCombinationsions(size);
-        ArrayList<ItemSet> freqItemHolder = filterFrequentItems(b, lastL);
-
-
-
-        //add to arrayList if this itemset is frequent
-        for (Integer i : b.getBasket()){
-            //create potential itemset of size - 1
-
-
-        }
-
-        return new ArrayList<ItemSet>();
-    }
-
     public ArrayList<ItemSet> filterFrequentItems(Basket b, HashMap<String, ItemSet> hash){
         ArrayList<Integer> freqItems = new ArrayList<Integer>();
         for(Integer item : b.getBasket()){
 
         }
         return new ArrayList<ItemSet>();
-    }
-
-    /*
-    * After the first pass, we examine the counts of the items to determine which of
-    them are frequent as singletons. It might appear surprising that many singletons
-    are not frequent. But remember that we set the threshold s sufficiently high
-    that we do not get too many frequent sets; a typical s would be 1% of the
-    baskets. If we think about our own visits to a supermarket, we surely buy
-    certain things more than 1% of the time: perhaps milk, bread, Coke or Pepsi,
-    and so on. We can even believe that 1% of the customers buy diapers, even
-    though we may not do so. However, many of the items on the shelves are surely
-    not bought by 1% of the customers: Creamy Caesar Salad Dressing for example.
-    For the second pass of A-Priori, we create a new numbering from 1 to m for
-    just the frequent items. This table is an array indexed 1 to n, and the entry
-    for i is either 0, if item i is not frequent, or a unique integer in the range 1 to
-    m if item i is frequent. We shall refer to this table as the frequent-items table.*/
-    public void AP_betweenPass(){
-
     }
 
 
