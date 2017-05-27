@@ -2,6 +2,7 @@ package com.company;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +51,8 @@ public class APriori {
             //start first pass starting with the C2 and L2
             currentC = AP_firstPass(data, k, lastL);
 
+
+
             for(Map.Entry<String, ItemSet> i : currentC.entrySet()){
                 System.out.println(i.getKey() + " " + i.getValue().getCount());
             }
@@ -77,48 +80,36 @@ public class APriori {
         //first get all frequent items by checking lastL
         ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
 
+        /*
+        * for each basket, generate all combinations size k of items.
+        * for each of these size k combinations, generate all combinations of size k -1
+        * for any size k combination, if its component combination (size k - 1) is not in lastL
+        * then it is not frequent
+        * */
+
         for(Basket b : data){
 
             //create all combinations of size k from the basket
-            ArrayList<ItemSet> allCombinations = b.generateCombinations(k);
+            ArrayList<ItemSet> allCombinationsK = b.generateCombinations(k);
             //for each combinations created, if this combination's parts are in Lk-1
-            for (ItemSet is : allCombinations){
-                //if(lastL.containsKey())
-            }
-            //then add to the freq items array, as this itemSet is frequent
-
-            ////////////////////////////////////////////////////////
-            //create possible combinations of k - 1
-            /*ArrayList<ItemSet> allCombinations = b.generateCombinations(k - 1);
-
-            System.out.println("Processing " + b.printRawInput());
-
-            for (ItemSet is : allCombinations){
-                //for each combination, if its in lastL, then it is frequent
-                if(lastL.containsKey(is.getName())){
-                    freqItems.add(is);
+            for (ItemSet isK : allCombinationsK){
+                //create component combinations
+                ArrayList<ItemSet> componentCombinations = Combinations.createCombinations(isK.getItemsArray(), k - 1);
+                //now check if each component combination is in L(k - 1); i.e lastL
+                for (ItemSet isK_minus1 : componentCombinations){
+                    if( !lastL.containsKey(isK_minus1.getName())){
+                        break; //if the component combination !in lastL, then its not frequent
+                        //so dont add it into freqItems
+                    }
                 }
+                //if it checks out that all component itemsets are in lastL, then add as a freq items
+                freqItems.add(isK);
             }
 
-            System.out.println("frequentItems contains: ");
-            for (ItemSet is : freqItems){
-                System.out.print(is.getName() + ": " + is.getCount() + ", ");
-            }
-
-            System.out.println();
-
-            //Now freqItems contains all frequent item candidates
-            //SO CREATE ALL COMBINATIONS OF THE FREQUENT ITEMS OF SIZE K, THEN
-            //INCREMENT COUNT / ADD TO THE COUNTHASH
-            ArrayList<ItemSet> freqItemCombinations =
-            for(ItemSet item : freqItems){
-                if(countHash.containsKey(item.getName())){
-                    countHash.get(item.getName()).incrementCount();
-                }else{
-                    countHash.put(item.getName(), item);
-                }
-            }*/
-
+        }
+        //now freq items contains all itemsets of size k that are frequent, so count them
+        for (ItemSet is : freqItems){
+            countHash.put(is.getName(), is);
         }
         return countHash;
     }
@@ -146,8 +137,15 @@ public class APriori {
     Finally, at the end of the second pass, examine the structure of counts to
     determine which pairs are frequent.
     */
-    public ArrayList<ItemSet> AP_secondPass(HashMap<String, ItemSet> C, int s){
-        return new ArrayList<ItemSet>();
+    public HashMap<String, ItemSet> AP_secondPass(HashMap<String, ItemSet> C, int s){
+
+        HashMap<String, ItemSet> filteredCounts = new HashMap<String, ItemSet>();
+        for (Map.Entry<String, ItemSet> is : C.entrySet()){
+            if(is.getValue().getCount() > s){
+                filteredCounts.put(is.getKey(), is.getValue());
+            }
+        }
+        return filteredCounts;
     }
 
     public HashMap<String, ItemSet> firstFilter(HashMap<String, ItemSet> c1, int support){
