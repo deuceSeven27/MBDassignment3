@@ -40,15 +40,8 @@ public class APriori {
 
         HashMap<String, ItemSet> lastL = LX.get(LX.size() - 1);
 
-
-        for(Map.Entry<String, ItemSet> i : currentL.entrySet()){
-            System.out.println(i.getKey() + " " + i.getValue().getCount());
-        }
-
-        //lastL = currentL; //lastL is the last element is the array
-
         System.out.println("entering while loop!");
-        while(/*lastL.size() > 0*/k < 4 ){
+        while(lastL.size() > 0){
 
             System.out.println("Counting for " + k);
 
@@ -57,27 +50,12 @@ public class APriori {
             //start first pass starting with the C2 and L2
             currentC = AP_firstPass(data, k, lastL);
 
-
-
-            System.out.println("currentC is:");
-            for(Map.Entry<String, ItemSet> i : currentC.entrySet()){
-                System.out.println(i.getKey() + " " + i.getValue().getCount());
-            }
-
             currentL = AP_secondPass(currentC, support);
-
-            System.out.println("currentL is:");
-            for(Map.Entry<String, ItemSet> i : currentL.entrySet()){
-                System.out.println(i.getKey() + " " + i.getValue().getCount());
-            }
-
 
             LX.add(currentL);
 
             k++;
         }
-
-        System.out.println("size is " + LX.size());
 
         return LX;
 
@@ -210,16 +188,6 @@ public class APriori {
         }
         return firstCount;
     }
-
-
-    public ArrayList<ItemSet> filterFrequentItems(Basket b, HashMap<String, ItemSet> hash){
-        ArrayList<Integer> freqItems = new ArrayList<Integer>();
-        for(Integer item : b.getBasket()){
-
-        }
-        return new ArrayList<ItemSet>();
-    }
-
 
     //read the data into memory, creating basket objects to represent them
     public ArrayList<Basket> readFile(String data){

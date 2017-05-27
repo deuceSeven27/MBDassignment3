@@ -23,7 +23,7 @@ public class Basket {
 
     }
 
-    public String printRawInput(){
+    public String getRawInput(){
         return rawData;
     }
 

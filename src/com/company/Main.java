@@ -1,5 +1,6 @@
 package com.company;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,18 +8,31 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-	    // write your code here
-        APriori ap = new APriori(args[0]);
+
+        SimpleRandomisedAlgorithm sra = new SimpleRandomisedAlgorithm();
+
+        ArrayList<Basket> sample = sra.createSample(args[0], 0.05);
+
+        /*for(Basket b : sample){
+            System.out.println(b.getRawInput());
+        }*/
+        System.out.println("Sample size: " + sample.size());
+
+        APriori ap = new APriori(sample);
+
         ArrayList<HashMap<String, ItemSet>> freqItems = ap.runApriori(3);
+
         int c = 1;
+        System.out.println("Results are...");
         for (HashMap<String, ItemSet> L : freqItems){
-            System.out.println("Now on " + c);
-            c++;
+
+            System.out.println("Printing frequent sets of size " + c + "...");
+
             for (Map.Entry<String, ItemSet> is : L.entrySet()){
                 System.out.println(is.getKey());
             }
+            c++;
         }
-
 
     }
 }
