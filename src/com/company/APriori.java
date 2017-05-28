@@ -153,6 +153,7 @@ public class APriori {
         return countHash;
     }
 
+    //filters out non-frequent items using past Ls
     public ArrayList<Integer> filterFrequentItems(Basket b, ArrayList<HashMap<String, ItemSet>> LX, int level){
 
         ArrayList<Integer> filteredItems = new ArrayList<Integer>();
@@ -166,6 +167,7 @@ public class APriori {
 
         return filteredItems;
 
+        // TODO: 5/28/2017 make this work filtering other levels
         /*for(int count = 0; count < level; count++){
             HashMap<String, ItemSet> hashMap = LX.get(count);
             ArrayList<ItemSet> combos = Combinations.createCombinations(b.getBasket(), count+1);
