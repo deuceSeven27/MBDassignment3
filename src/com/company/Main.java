@@ -11,7 +11,7 @@ public class Main {
 
         SimpleRandomisedAlgorithm sra = new SimpleRandomisedAlgorithm();
 
-        ArrayList<Basket> sample = sra.createSample(args[0], 0.05);
+        ArrayList<Basket> sample = sra.createSample(args[0], 0.03);
 
         /*for(Basket b : sample){
             System.out.println(b.getRawInput());
@@ -20,7 +20,7 @@ public class Main {
 
         APriori ap = new APriori(sample);
 
-        ArrayList<HashMap<String, ItemSet>> freqItems = ap.runApriori(3);
+        ArrayList<HashMap<String, ItemSet>> freqItems = ap.runApriori(50);
 
         int c = 1;
         System.out.println("Results are...");

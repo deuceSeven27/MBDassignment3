@@ -69,7 +69,7 @@ public class APriori {
     name into an integer. Next, we use that integer to index into the array of
     counts, and we add 1 to the integer found there.*/
     //essentially this just counts all size k combinations of possible items
-    public HashMap<String, ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, ItemSet> lastL){
+    public HashMap<String, ItemSet> AP_firstPass(ArrayList<Basket> data, int k, HashMap<String, ItemSet> lastL, ArrayList<HashMap<String, ItemSet>> LX){
         //read each item, hash the item and increment count
         /*1. For each basket, look in the frequent-items table to see which of its items are frequent.
         2. In a double loop, generate all pairs of frequent items in that basket.
@@ -85,26 +85,52 @@ public class APriori {
         * then it is not frequent
         * */
 
+        /*
+        *
+        * RATHER than do this, we should eliminate the costs of generating new items
+        * that are not frequent items.
+        * So, we should first filter out the non-frequent items using the Ls
+        *
+        * ALGORITHM
+        * -------------------------
+        * For each basket:
+        *   filteredItems[] = filterFreqItems(basket, LX[])
+        *   filteredCombinations[] = Combinations.createCombinations(filtereditems)
+        *   for each potentialCombination in filteredCombinations:
+        *       component combinations = Combinations.createCombinations(combination)
+        *       if all component combinations in Lk-1:
+        *           add to counthash
+        *       else:
+        *           don't add to counthash
+        *
+        *
+        * How to filter?
+        * -------------------------
+        * for item in basket:
+        *   for(int i = 0; i < count? ; i++):
+        *       hashmap = LX.get(i);
+        *       generate (size i + 1) combinations
+        *       for each item:
+        *           check if in hashmap
+        *
+        *
+        *
+        * */
+
         for(Basket b : data){
 
-            //first get all frequent items by checking lastL
-            ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
+            ArrayList<Integer> filtereditems = filterFrequentItems(b, LX);
 
-            //create all combinations of size k from the basket
-            ArrayList<ItemSet> allCombinationsK = b.generateCombinations(k);
-            //for each combinations created, if this combination's parts are in Lk-1
-            for (ItemSet isK : allCombinationsK){
-                //create component combinations
-                ArrayList<ItemSet> componentCombinations = Combinations.createCombinations(isK.getItemsArray(), k - 1);
-                //now check if each component combination is in L(k - 1); i.e lastL
-                for (ItemSet isK_minus1 : componentCombinations){
-                    if( !lastL.containsKey(isK_minus1.getName())){
-                        break; //if the component combination !in lastL, then its not frequent
-                        //so dont add it into freqItems
+            ArrayList<ItemSet> filteredCombinations = Combinations.createCombinations(filtereditems, k);
+
+            for(ItemSet is : filteredCombinations){
+                ArrayList<ItemSet> componentCombinations = Combinations.createCombinations(is.getItemsArray(), k -1);
+                for (ItemSet iskMinus1 : componentCombinations){
+                    if(!lastL.containsKey(iskMinus1.getName())){
+                        break; //this item does not have all component combinations in Lk-1
                     }
                 }
-                //if it checks out that all component itemsets are in lastL, then add as a freq items
-                freqItems.add(isK);
+
             }
 
             //now freq items contains all itemsets of size k that are frequent, so count them
