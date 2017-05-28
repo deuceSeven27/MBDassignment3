@@ -48,7 +48,7 @@ public class APriori {
             lastL = LX.get(LX.size() - 1); // lastL is the last set of freq items found
 
             //start first pass starting with the C2 and L2
-            currentC = AP_firstPass(data, k, lastL);
+            currentC = AP_firstPass(data, k, lastL, LX);
 
             currentL = AP_secondPass(currentC, support);
 
@@ -75,6 +75,7 @@ public class APriori {
         2. In a double loop, generate all pairs of frequent items in that basket.
         3. For each such pair, add one to its count in the data structure used to store counts.*/
         HashMap<String, ItemSet> countHash = new HashMap<String, ItemSet>();
+        ArrayList<ItemSet> freqItems = new ArrayList<ItemSet>();
 
 
 
@@ -119,18 +120,23 @@ public class APriori {
 
         for(Basket b : data){
 
-            ArrayList<Integer> filtereditems = filterFrequentItems(b, LX);
+            ArrayList<Integer> filtereditems = filterFrequentItems(b, LX, k - 1);
 
             ArrayList<ItemSet> filteredCombinations = Combinations.createCombinations(filtereditems, k);
 
             for(ItemSet is : filteredCombinations){
                 ArrayList<ItemSet> componentCombinations = Combinations.createCombinations(is.getItemsArray(), k -1);
+                boolean canAdd = true;
                 for (ItemSet iskMinus1 : componentCombinations){
+                    canAdd = true;
                     if(!lastL.containsKey(iskMinus1.getName())){
+                        canAdd = false;
                         break; //this item does not have all component combinations in Lk-1
                     }
                 }
-
+                if(canAdd == true){
+                    freqItems.add(is);
+                }
             }
 
             //now freq items contains all itemsets of size k that are frequent, so count them
@@ -145,6 +151,29 @@ public class APriori {
         }
 
         return countHash;
+    }
+
+    public ArrayList<Integer> filterFrequentItems(Basket b, ArrayList<HashMap<String, ItemSet>> LX, int level){
+
+        ArrayList<Integer> filteredItems = new ArrayList<Integer>();
+
+        //try for first level
+        for(Integer i : b.getBasket()){
+            if(LX.get(0).containsKey(new ItemSet(i).getName())){
+                filteredItems.add(i);
+            }
+        }
+
+        return filteredItems;
+
+        /*for(int count = 0; count < level; count++){
+            HashMap<String, ItemSet> hashMap = LX.get(count);
+            ArrayList<ItemSet> combos = Combinations.createCombinations(b.getBasket(), count+1);
+            for(ItemSet is : combos){
+                ArrayList<ItemSet> combos = Combinations.createCombinations()
+            }
+        }*/
+
     }
 
     /*
