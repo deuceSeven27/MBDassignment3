@@ -21,5 +21,17 @@ public class Main {
 
         ArrayList<HashMap<String, ItemSet>> freqItems = ap.runApriori(500);
 
+        int c = 1;
+        System.out.println("Results are...");
+        for (HashMap<String, ItemSet> L : freqItems){
+
+            System.out.println("Printing frequent sets of size " + c + "...");
+
+            for (Map.Entry<String, ItemSet> is : L.entrySet()){
+                System.out.println(is.getKey());
+            }
+            c++;
+        }
+
     }
 }
